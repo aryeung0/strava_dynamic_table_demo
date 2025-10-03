@@ -1,4 +1,4 @@
-# 🏔️ Strava Dynamic Tables Demo - Customer Version
+# 🏔️ Strava Dynamic Tables Demo 
 
 A demonstration of Snowflake Dynamic Tables capabilities using Strava-like athletic activity data, enhanced with Cortex AI for intelligent insights.
 
