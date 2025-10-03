@@ -83,9 +83,9 @@ SELECT 'Environment setup completed successfully!' as STATUS,
 -- ============================================================================
 -- Setup Complete! 
 -- Next Steps:
--- 1. Run notebook: 01_data_streaming_simulator.ipynb
--- 2. Run notebook: 02_create_dynamic_tables.ipynb
--- 3. Run notebook: 03_monitoring_queries.ipynb
+-- 1. Open 01_strava_dynamic_tables_demo.ipynb in Snowflake Notebooks
+-- 2. Run all cells sequentially to complete the demo (~18 minutes)
+-- 3. When done, run 02_cleanup.sql to remove all resources
 -- ============================================================================
 
 
