@@ -2,7 +2,18 @@
 
 A demonstration of Snowflake Dynamic Tables capabilities using Strava-like athletic activity data, enhanced with Cortex AI for intelligent insights.
 
-##  Demo Overview
+## 📋 Table of Contents
+- [Demo Overview](#demo-overview)
+- [Quick Start (3 Steps)](#quick-start-3-steps)
+- [Project Structure](#project-structure)
+- [Architecture](#architecture)
+- [Key Features](#key-features)
+- [Expected Results](#expected-results)
+- [Cleanup](#cleanup)
+
+---
+
+## 🎯 Demo Overview
 
 This demo showcases how Dynamic Tables can automate data pipeline processing with built-in incremental refresh, combined with Snowflake Cortex AI to generate intelligent performance insights for athletes.
 
@@ -12,160 +23,126 @@ This demo showcases how Dynamic Tables can automate data pipeline processing wit
 - **AI-Powered Insights**: Cortex COMPLETE generates personalized performance analysis
 - **Self-Managing Infrastructure**: Built-in refresh scheduling and optimization
 
-##  Project Structure
+---
 
-### Files (Run in Order)
+## ⚡ Quick Start
+
+**Time: ~20 minutes | Difficulty: Easy**
+
+### Prerequisites
+- Snowflake account with ACCOUNTADMIN privileges
+- Access to create Dynamic Tables
+- Cortex AI functions enabled
+
+### Step 1: Setup (2 min)
+Run `00_setup_environment.sql` - Creates database, schemas, role, and warehouse
+
+### Step 2: Run Demo (18 min)
+Open `01_strava_dynamic_tables_demo.ipynb` in Snowflake Notebooks and run all cells:
+
+1. **Stream Initial Data** - Generate baseline activities
+2. **Create Dynamic Tables** - Build 2 AI-powered tables (1-min LAG)
+3. **Stream More Data** - Watch tables auto-refresh every minute
+4. **Monitor Results** - View refresh history and AI insights
+5. **Manage Tables** - Adjust LAG or suspend/resume
+
+### What You'll See
+- **Activity Intelligence**: Real-time AI insights per activity (1-min refresh)
+- **Athlete Dashboard**: Aggregated KPIs with AI profiles (1-min refresh)
+- Live demonstration of incremental refresh as new data arrives
+
+---
+
+## 📁 Project Structure
+
+**Files (Run in Order):**
 
 1. **`00_setup_environment.sql`** - Initial setup (database, schema, role, warehouse)
 2. **`01_strava_dynamic_tables_demo.ipynb`** - Complete end-to-end demo notebook
 3. **`02_cleanup.sql`** - Remove all demo resources when done
 
-##  Quick Start
-
-### Prerequisites
-1. Snowflake account with appropriate privileges (ACCOUNTADMIN to start)
-2. Access to create Dynamic Tables
-3. Cortex AI functions enabled (contact your Snowflake rep if needed)
-
-### Step-by-Step Setup
-
-#### Step 1: Run Environment Setup (One-Time)
-Execute `00_setup_environment.sql` in a Snowflake worksheet:
-- Creates database `STRAVA_DEMO_SAMPLE`
-- Creates schemas `RAW_DATA` and `STRAVA_DYNAMIC_TABLES`
-- Creates role `STRAVA_DEMO_ADMIN`
-- Creates warehouse `STRAVA_DEMO_WH`
-- Sets up all necessary permissions
-
-**Run this once per environment.**
-
-#### Step 2: Run the Complete Demo
-Open and execute `01_strava_dynamic_tables_demo.ipynb` in Snowflake Notebooks.
-
-This comprehensive notebook includes 4 parts:
-
-**Part 1: Data Streaming Setup**
-- Creates the `ACTIVITIES` table in `RAW_DATA` schema
-- Generates realistic activity data (Run, Ride, Swim, Walk, Hike)
-- Streams activities continuously (configurable duration and batch size)
-- Verifies initial data load
-
-**Part 2: Create Dynamic Tables with AI**
-- Creates `ACTIVITY_INTELLIGENCE` Dynamic Table (2-minute LAG)
-  - Calculates pace metrics
-  - Generates AI performance insights for each activity
-- Creates `ATHLETE_PERFORMANCE_DASHBOARD` Dynamic Table (5-minute LAG)
-  - Aggregates athlete KPIs
-  - Classifies athletes into performance tiers
-  - Generates AI athlete profiles and recommendations
-
-**Part 3: Monitoring & Analytics**
-- View Dynamic Tables refresh history with row counts
-- Check source table statistics
-- See AI-generated insights and athlete profiles
-- Monitor performance tier distribution
-- Analyze activity type breakdown
-- View real-time processing timeline
-
-**Part 4: Management & Optimization**
-- Adjust LAG settings to balance freshness vs. cost
-- Suspend/Resume Dynamic Tables for cost control
-
-#### Step 3: Demo Real-Time Updates
-1. Re-run the streaming function (Part 1, `stream_data` cell)
-2. Watch as new activities are inserted
-3. Use monitoring queries (Part 3) to see Dynamic Tables auto-refresh
-4. Observe AI insights generated for new data
-
-#### Step 4: Cleanup (When Done)
-Run `02_cleanup.sql` to remove all demo resources:
-- Drops Dynamic Tables
-- Drops source table
-- Drops schemas and database
-- Drops warehouse and role
-
-##  Architecture
+## 🏗️ Architecture
 
 ### Data Flow
-
 ```
-RAW_DATA.ACTIVITIES (Source Table)
-    ↓
-    ↓ (2-minute LAG)
-    ↓
-ACTIVITY_INTELLIGENCE (Dynamic Table)
-    - Calculate pace metrics
-    - AI performance insights per activity
-    ↓
-    ↓ (5-minute LAG)
-    ↓
-ATHLETE_PERFORMANCE_DASHBOARD (Dynamic Table)
-    - Aggregate athlete KPIs
-    - Performance tier classification
-    - AI athlete profiling
+ACTIVITIES → ACTIVITY_INTELLIGENCE → ATHLETE_PERFORMANCE_DASHBOARD
+(Source)     (1-min LAG, AI insights)  (1-min LAG, AI profiles)
 ```
 
-### Dynamic Tables Created
+### Dynamic Tables
 
-#### 1. **ACTIVITY_INTELLIGENCE** (2-minute LAG)
-Real-time activity processing with AI-generated insights:
-- **Source**: `RAW_DATA.ACTIVITIES` (last 30 days)
-- **Features**:
-  - Calculated pace metrics (km/h)
-  - AI-powered performance insights using Cortex COMPLETE
-  - Real-time activity processing timestamp
-- **AI Enhancement**: LLM generates personalized performance analysis for each activity
+**1. ACTIVITY_INTELLIGENCE** (1-min LAG)
+- Processes each activity with AI-generated performance insights
+- Calculates pace, duration, and other metrics
+- Uses Cortex COMPLETE for personalized coaching feedback
 
-#### 2. **ATHLETE_PERFORMANCE_DASHBOARD** (5-minute LAG)
-Aggregated athlete KPIs with AI profiling:
-- **Source**: `ACTIVITY_INTELLIGENCE`
-- **Aggregations**:
-  - Total activities and distance (7-day rolling)
-  - Average pace and heart rate
-  - Total elevation gain
-  - Performance tier classification (High Performer, Regular Athlete, Casual User)
-- **AI Enhancement**: LLM generates athlete profiles and training recommendations
+**2. ATHLETE_PERFORMANCE_DASHBOARD** (1-min LAG)
+- Aggregates athlete KPIs (distance, pace, heart rate)
+- Classifies into performance tiers
+- Generates AI athlete profiles and training recommendations
 
 ## 💡 Key Features
 
-### AI Integration with Cortex
-- **Performance Insights**: LLM analyzes each activity (distance, pace, time) and provides coaching feedback
-- **Athlete Profiling**: Generates personalized training recommendations based on aggregate metrics
-- **Natural Language Output**: Human-readable insights for athletes and coaches
-- **No ML Infrastructure**: Uses Snowflake's built-in `CORTEX.COMPLETE` function
+**AI Integration**
+- Performance insights per activity using Cortex COMPLETE
+- Athlete profiling with training recommendations
+- No ML infrastructure needed
 
-### Dynamic Tables Benefits
-- **Declarative Design**: Define what you want, not how to build it
-- **Automatic Refresh**: Built-in scheduling with configurable LAG
-- **Incremental Processing**: Efficient updates only for changed data
-- **Dependency Management**: Automatic DAG creation and optimization
-- **No Orchestration**: Replaces complex Airflow/dbt workflows
+**Dynamic Tables Benefits**
+- Declarative design - define what, not how
+- Automatic refresh every minute
+- Incremental processing - only changed data
+- No orchestration required
 
-### Performance Optimization
-- **Single Warehouse**: Uses `STRAVA_DEMO_WH` for all workloads (simplified architecture)
-- **Configurable LAG**: 2-minute for activities, 5-minute for aggregations
-- **Filtered Data**: Processes only recent activities (30-day window)
-- **Smart Refresh**: Incremental updates minimize compute costs
+**Optimizations**
+- 1-minute LAG for near real-time insights
+- 30-day rolling window for efficient processing
+- Single warehouse architecture
 
 
 
-## 📈 Expected Results
+## 📈 Sample Results
 
-### Sample AI Insights
+**Activity AI Insight:**
+> "This Run shows strong endurance with 15.2 km/h pace over 10km. Consider interval training to improve speed."
 
-**Activity Performance Insight:**
-> "This Run activity shows strong endurance performance with a 15.2 km/h pace over 10 kilometers. Consider incorporating interval training to improve speed while maintaining this excellent aerobic base."
+**Athlete AI Profile:**
+> "12 activities, 85.3 km total, 14.8 km/h avg pace, 152 bpm. Consistent training habits. Recommend 10% weekly distance increases."
 
-**Athlete Profile:**
-> "Based on 12 activities totaling 85.3 km with an average pace of 14.8 km/h and heart rate of 152 bpm, this athlete demonstrates consistent training habits. Recommend progressive overload with 10% weekly distance increases to continue fitness gains."
+**Performance Tiers:** High Performer (>15 km/h) | Regular Athlete (10-15) | Casual (<10)
 
-### Performance Tiers
-- **High Performer**: Pace > 15 km/h (fast runners/cyclists)
-- **Regular Athlete**: Pace 10-15 km/h (consistent training)
-- **Casual User**: Pace < 10 km/h (recreational activities)
 
+---
 
 ## 🧹 Cleanup
 
-To completely remove all demo objects, run `02_cleanup.sql`
+When finished with the demo:
+
+**Option 1: Suspend to Save Costs**
+```sql
+-- Use Part 4 of the notebook or run:
+ALTER DYNAMIC TABLE ACTIVITY_INTELLIGENCE SUSPEND;
+ALTER DYNAMIC TABLE ATHLETE_PERFORMANCE_DASHBOARD SUSPEND;
+```
+
+**Option 2: Complete Removal**
+```sql
+-- Run: 02_cleanup.sql
+-- Removes all demo resources (database, schemas, tables, warehouse, role)
+```
+
+Resume anytime with:
+```sql
+ALTER DYNAMIC TABLE ACTIVITY_INTELLIGENCE RESUME;
+ALTER DYNAMIC TABLE ATHLETE_PERFORMANCE_DASHBOARD RESUME;
+```
+
 ---
+
+## 📧 Support
+
+For questions or issues with this demo, contact your Snowflake account team.
+
+---
+
+**Ready to build intelligent, self-managing data pipelines? 🚀**
