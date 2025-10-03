@@ -66,7 +66,7 @@ Open `01_strava_dynamic_tables_demo.ipynb` in Snowflake Notebooks and run all ce
 ### Data Flow
 ```
 ACTIVITIES → ACTIVITY_INTELLIGENCE → ATHLETE_PERFORMANCE_DASHBOARD
-(Source)     (1-min LAG, AI insights)  (1-min LAG, AI profiles)
+(Source)     (1-min LAG, AI insights)  (2-min LAG, AI profiles)
 ```
 
 ### Dynamic Tables
