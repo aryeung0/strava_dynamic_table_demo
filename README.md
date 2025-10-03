@@ -18,7 +18,7 @@ This demo showcases how Dynamic Tables can automate data pipeline processing wit
 
 1. **`00_setup_environment.sql`** - Initial setup (database, schema, role, warehouse)
 2. **`01_strava_dynamic_tables_demo.ipynb`** - Complete end-to-end demo notebook
-3. **`02_cleanup.ipynb`** - Remove all demo resources when done
+3. **`02_cleanup.sql`** - Remove all demo resources when done
 
 ##  Quick Start
 
@@ -78,7 +78,7 @@ This comprehensive notebook includes 4 parts:
 4. Observe AI insights generated for new data
 
 #### Step 4: Cleanup (When Done)
-Run `02_cleanup.ipynb` to remove all demo resources:
+Run `02_cleanup.sql` to remove all demo resources:
 - Drops Dynamic Tables
 - Drops source table
 - Drops schemas and database
@@ -214,7 +214,7 @@ ALTER DYNAMIC TABLE ATHLETE_PERFORMANCE_DASHBOARD RESUME;
 
 ## 🧹 Cleanup
 
-To completely remove all demo objects, run `02_cleanup.ipynb` or execute:
+To completely remove all demo objects, run `02_cleanup.sql`:
 
 ```sql
 USE ROLE ACCOUNTADMIN;

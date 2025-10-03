@@ -51,7 +51,7 @@ Watch: Part 3 monitoring queries show auto-refresh!
 ## 📚 Additional Resources
 
 - **README.md** - Complete documentation with architecture details
-- **02_cleanup.ipynb** - Clean up all resources when done
+- **02_cleanup.sql** - Clean up all resources when done
 
 ---
 
@@ -82,8 +82,8 @@ ALTER DYNAMIC TABLE ATHLETE_PERFORMANCE_DASHBOARD SUSPEND;
 ```
 
 **Option 2: Complete Removal**
-```
-Run: 02_cleanup.ipynb
+```sql
+-- Run: 02_cleanup.sql
 -- Removes all demo resources
 ```
 
