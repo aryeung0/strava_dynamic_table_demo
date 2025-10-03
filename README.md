@@ -148,37 +148,6 @@ Aggregated athlete KPIs with AI profiling:
 - **Smart Refresh**: Incremental updates minimize compute costs
 
 
-## 🔧 Configuration Options
-
-### Adjusting Refresh Frequency (LAG)
-
-Modify LAG settings to balance freshness vs. cost:
-
-```sql
--- More aggressive refresh (faster, higher cost)
-ALTER DYNAMIC TABLE ACTIVITY_INTELLIGENCE SET TARGET_LAG = '1 MINUTE';
-ALTER DYNAMIC TABLE ATHLETE_PERFORMANCE_DASHBOARD SET TARGET_LAG = '3 MINUTES';
-
--- Less aggressive refresh (slower, lower cost)
-ALTER DYNAMIC TABLE ACTIVITY_INTELLIGENCE SET TARGET_LAG = '5 MINUTES';
-ALTER DYNAMIC TABLE ATHLETE_PERFORMANCE_DASHBOARD SET TARGET_LAG = '10 MINUTES';
-```
-
-### Suspending to Save Costs
-
-When not actively demoing, suspend to prevent ongoing refreshes:
-
-```sql
-ALTER DYNAMIC TABLE ACTIVITY_INTELLIGENCE SUSPEND;
-ALTER DYNAMIC TABLE ATHLETE_PERFORMANCE_DASHBOARD SUSPEND;
-```
-
-Resume when ready:
-
-```sql
-ALTER DYNAMIC TABLE ACTIVITY_INTELLIGENCE RESUME;
-ALTER DYNAMIC TABLE ATHLETE_PERFORMANCE_DASHBOARD RESUME;
-```
 
 ## 📈 Expected Results
 
@@ -195,57 +164,8 @@ ALTER DYNAMIC TABLE ATHLETE_PERFORMANCE_DASHBOARD RESUME;
 - **Regular Athlete**: Pace 10-15 km/h (consistent training)
 - **Casual User**: Pace < 10 km/h (recreational activities)
 
-## 🎯 Business Value
-
-### For Athletes
-- Personalized AI coaching insights after every activity
-- Performance tracking and tier classification
-- Training recommendations based on historical patterns
-
-### For Platform Teams
-- Automated data pipelines without orchestration complexity
-- Real-time insights without manual analysis
-- Scalable AI-powered features without custom ML infrastructure
-
-### For Business
-- Engagement monitoring and intervention opportunities
-- Performance-based user segmentation
-- Premium feature demonstration (AI coaching)
 
 ## 🧹 Cleanup
 
-To completely remove all demo objects, run `02_cleanup.sql`:
-
-```sql
-USE ROLE ACCOUNTADMIN;
-
--- Drop Dynamic Tables
-DROP DYNAMIC TABLE IF EXISTS STRAVA_DEMO_SAMPLE.STRAVA_DYNAMIC_TABLES.ATHLETE_PERFORMANCE_DASHBOARD;
-DROP DYNAMIC TABLE IF EXISTS STRAVA_DEMO_SAMPLE.STRAVA_DYNAMIC_TABLES.ACTIVITY_INTELLIGENCE;
-
--- Drop schemas, database, warehouse, and role
-DROP SCHEMA IF EXISTS STRAVA_DEMO_SAMPLE.STRAVA_DYNAMIC_TABLES CASCADE;
-DROP SCHEMA IF EXISTS STRAVA_DEMO_SAMPLE.RAW_DATA CASCADE;
-DROP DATABASE IF EXISTS STRAVA_DEMO_SAMPLE CASCADE;
-DROP WAREHOUSE IF EXISTS STRAVA_DEMO_WH;
-DROP ROLE IF EXISTS STRAVA_DEMO_ADMIN;
-```
-
-## 🎬 Demo Tips
-
-1. **Pre-load data**: Run the streaming simulator before the demo to have baseline data
-2. **Show the DAG**: Explain how Dynamic Tables automatically manage dependencies
-3. **Highlight AI**: Show actual AI-generated insights and how they vary per athlete
-4. **Live refresh**: Stream new data and watch tables refresh in real-time
-5. **Cost efficiency**: Discuss how LAG settings impact cost vs. freshness
-6. **Compare to alternatives**: Mention how this replaces complex Airflow/dbt setups
-
-## 📧 Support
-
-For questions or issues with this demo, contact your Snowflake account team.
-
+To completely remove all demo objects, run `02_cleanup.sql`
 ---
-
-**Ready to build intelligent, self-managing data pipelines? 🚀**
-
-

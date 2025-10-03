@@ -92,9 +92,6 @@ Resume anytime with:
 ALTER DYNAMIC TABLE ACTIVITY_INTELLIGENCE RESUME;
 ALTER DYNAMIC TABLE ATHLETE_PERFORMANCE_DASHBOARD RESUME;
 ```
-
----
-
-**Total Time: ~20 minutes | Difficulty: Easy | Wow Factor: High! 🚀**
+---------------------------------
 
 
