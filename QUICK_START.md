@@ -1,60 +1,57 @@
-# ⚡ Quick Start Guide - 5 Steps
+# ⚡ Quick Start Guide - 3 Steps
 
 ## 1️⃣ Setup Environment (2 min)
 ```sql
 -- Run this SQL script in Snowflake worksheet
 00_setup_environment.sql
 ```
-✅ Creates database, schemas, role, and warehouses
+✅ Creates database, schemas, role, and warehouse
 
 ---
 
-## 2️⃣ Generate Data (7 min)
+## 2️⃣ Run Complete Demo (15 min)
 ```
-Open: 01_data_streaming_simulator.ipynb in Snowflake Notebooks
-Run: All cells (creates table, generates, and streams activity data)
+Open: 01_strava_dynamic_tables_demo.ipynb in Snowflake Notebooks
+Run: All cells sequentially
 ```
-✅ Creates ACTIVITIES table with realistic data
+
+### What This Notebook Does:
+
+**Part 1: Data Streaming** (5 min)
+- Creates ACTIVITIES table
+- Generates and streams realistic activity data
+
+**Part 2: Dynamic Tables** (5 min)
+- Creates 2 AI-powered Dynamic Tables
+- Sets up automated refresh pipeline
+
+**Part 3: Monitoring** (3 min)
+- View refresh history
+- See AI-generated insights
+- Analyze athlete profiles and metrics
+
+**Part 4: Management** (2 min)
+- Adjust LAG settings
+- Suspend/Resume controls
+
+✅ Complete end-to-end demo in one notebook!
 
 ---
 
-## 3️⃣ Create Dynamic Tables (5 min)
+## 3️⃣ Demo Real-Time Updates (5 min)
 ```
-Open: 02_create_dynamic_tables.ipynb
-Run: All cells (creates AI-powered Dynamic Tables)
+In same notebook:
+Re-run: Part 1 streaming cell
+Watch: Part 3 monitoring queries show auto-refresh!
 ```
-✅ Creates 2 Dynamic Tables with Cortex AI integration
-
----
-
-## 4️⃣ Monitor Results (2 min)
-```sql
--- Run these queries in Snowflake worksheet
-03_monitoring_queries.sql
-
--- Key queries:
--- #2: Refresh history
--- #4: AI activity insights
--- #5: AI athlete profiles
-```
-✅ View refresh history and AI-generated insights
-
----
-
-## 5️⃣ See Real-Time Updates (5 min)
-```
-Go back to: 01_data_streaming_simulator.ipynb
-Re-run: Cell 12 (stream more data)
-Watch: Dynamic Tables auto-refresh!
-```
-✅ Observe automatic incremental processing
+✅ Observe Dynamic Tables processing new data automatically
 
 ---
 
 ## 📚 Additional Resources
 
-- **README.md** - Complete documentation
-- **DEMO_GUIDE.md** - Detailed demo walkthrough with talking points
+- **README.md** - Complete documentation with architecture details
+- **02_cleanup.ipynb** - Clean up all resources when done
 
 ---
 
@@ -73,14 +70,21 @@ Watch: Dynamic Tables auto-refresh!
 
 ---
 
-## ⏸️ Don't Forget to Suspend!
+## 🧹 Cleanup When Done
 
-When done demoing, save costs by suspending:
+When finished with the demo:
 
+**Option 1: Suspend to Save Costs**
 ```sql
+-- Use Part 4 of the notebook or run:
 ALTER DYNAMIC TABLE ACTIVITY_INTELLIGENCE SUSPEND;
 ALTER DYNAMIC TABLE ATHLETE_PERFORMANCE_DASHBOARD SUSPEND;
-ALTER WAREHOUSE STRAVA_DT_DEMO_WH SUSPEND;
+```
+
+**Option 2: Complete Removal**
+```
+Run: 02_cleanup.ipynb
+-- Removes all demo resources
 ```
 
 Resume anytime with:

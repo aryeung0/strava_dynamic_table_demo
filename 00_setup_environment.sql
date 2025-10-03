@@ -66,19 +66,7 @@ GRANT SELECT ON ALL DYNAMIC TABLES IN SCHEMA STRAVA_DYNAMIC_TABLES TO ROLE STRAV
 GRANT SELECT ON FUTURE DYNAMIC TABLES IN SCHEMA STRAVA_DYNAMIC_TABLES TO ROLE STRAVA_DEMO_ADMIN;
 
 -- ============================================================================
--- 5. CREATE WAREHOUSE FOR DYNAMIC TABLES
--- ============================================================================
-CREATE OR REPLACE WAREHOUSE STRAVA_DT_DEMO_WH
-    WAREHOUSE_SIZE = XSMALL
-    AUTO_SUSPEND = 300
-    AUTO_RESUME = TRUE
-    INITIALLY_SUSPENDED = FALSE
-    COMMENT = 'Dedicated warehouse for Dynamic Tables processing';
-
-GRANT USAGE, OPERATE ON WAREHOUSE STRAVA_DT_DEMO_WH TO ROLE STRAVA_DEMO_ADMIN;
-
--- ============================================================================
--- 6. VERIFY SETUP
+-- 5. VERIFY SETUP
 -- ============================================================================
 -- Switch to the demo role
 USE ROLE STRAVA_DEMO_ADMIN;

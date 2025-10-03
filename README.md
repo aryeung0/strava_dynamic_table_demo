@@ -2,7 +2,7 @@
 
 A demonstration of Snowflake Dynamic Tables capabilities using Strava-like athletic activity data, enhanced with Cortex AI for intelligent insights.
 
-## 🎯 Demo Overview
+##  Demo Overview
 
 This demo showcases how Dynamic Tables can automate data pipeline processing with built-in incremental refresh, combined with Snowflake Cortex AI to generate intelligent performance insights for athletes.
 
@@ -12,16 +12,15 @@ This demo showcases how Dynamic Tables can automate data pipeline processing wit
 - **AI-Powered Insights**: Cortex COMPLETE generates personalized performance analysis
 - **Self-Managing Infrastructure**: Built-in refresh scheduling and optimization
 
-## 📁 Project Structure
+##  Project Structure
 
 ### Files (Run in Order)
 
-1. **`00_setup_environment.sql`** - Initial setup (database, schema, role, warehouses)
-2. **`01_data_streaming_simulator.ipynb`** - Create table and simulate streaming data
-3. **`02_create_dynamic_tables.ipynb`** - Create Dynamic Tables with AI
-4. **`03_monitoring_queries.sql`** - Monitor refresh activity and view results
+1. **`00_setup_environment.sql`** - Initial setup (database, schema, role, warehouse)
+2. **`01_strava_dynamic_tables_demo.ipynb`** - Complete end-to-end demo notebook
+3. **`02_cleanup.ipynb`** - Remove all demo resources when done
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 1. Snowflake account with appropriate privileges (ACCOUNTADMIN to start)
@@ -35,20 +34,23 @@ Execute `00_setup_environment.sql` in a Snowflake worksheet:
 - Creates database `STRAVA_DEMO_SAMPLE`
 - Creates schemas `RAW_DATA` and `STRAVA_DYNAMIC_TABLES`
 - Creates role `STRAVA_DEMO_ADMIN`
-- Creates warehouses `STRAVA_DEMO_WH` and `STRAVA_DT_DEMO_WH`
+- Creates warehouse `STRAVA_DEMO_WH`
 - Sets up all necessary permissions
 
 **Run this once per environment.**
 
-#### Step 2: Generate and Stream Data
-Open and execute `01_data_streaming_simulator.ipynb` in Snowflake Notebooks:
+#### Step 2: Run the Complete Demo
+Open and execute `01_strava_dynamic_tables_demo.ipynb` in Snowflake Notebooks.
+
+This comprehensive notebook includes 4 parts:
+
+**Part 1: Data Streaming Setup**
 - Creates the `ACTIVITIES` table in `RAW_DATA` schema
 - Generates realistic activity data (Run, Ride, Swim, Walk, Hike)
-- Streams 10 activities every minute for 5 minutes (configurable)
-- Provides sample queries to verify data
+- Streams activities continuously (configurable duration and batch size)
+- Verifies initial data load
 
-#### Step 3: Create Dynamic Tables
-Open and execute `02_create_dynamic_tables.ipynb`:
+**Part 2: Create Dynamic Tables with AI**
 - Creates `ACTIVITY_INTELLIGENCE` Dynamic Table (2-minute LAG)
   - Calculates pace metrics
   - Generates AI performance insights for each activity
@@ -57,22 +59,32 @@ Open and execute `02_create_dynamic_tables.ipynb`:
   - Classifies athletes into performance tiers
   - Generates AI athlete profiles and recommendations
 
-#### Step 4: Monitor and Observe
-Use `03_monitoring_queries.sql` to:
-- View Dynamic Tables refresh history
-- Check current row counts
-- See AI-generated insights
+**Part 3: Monitoring & Analytics**
+- View Dynamic Tables refresh history with row counts
+- Check source table statistics
+- See AI-generated insights and athlete profiles
 - Monitor performance tier distribution
-- Adjust LAG settings if needed
+- Analyze activity type breakdown
+- View real-time processing timeline
 
-#### Step 5: Demo Real-Time Updates
-1. Go back to `01_data_streaming_simulator.ipynb`
-2. Run the streaming function again (Cell 12)
-3. Watch as new activities are inserted
-4. Use monitoring queries to see Dynamic Tables auto-refresh
-5. Observe AI insights generated for new data
+**Part 4: Management & Optimization**
+- Adjust LAG settings to balance freshness vs. cost
+- Suspend/Resume Dynamic Tables for cost control
 
-## 🏗️ Architecture
+#### Step 3: Demo Real-Time Updates
+1. Re-run the streaming function (Part 1, `stream_data` cell)
+2. Watch as new activities are inserted
+3. Use monitoring queries (Part 3) to see Dynamic Tables auto-refresh
+4. Observe AI insights generated for new data
+
+#### Step 4: Cleanup (When Done)
+Run `02_cleanup.ipynb` to remove all demo resources:
+- Drops Dynamic Tables
+- Drops source table
+- Drops schemas and database
+- Drops warehouse and role
+
+##  Architecture
 
 ### Data Flow
 
@@ -130,27 +142,11 @@ Aggregated athlete KPIs with AI profiling:
 - **No Orchestration**: Replaces complex Airflow/dbt workflows
 
 ### Performance Optimization
-- **Dedicated Warehouse**: Separate `STRAVA_DT_DEMO_WH` for Dynamic Tables workload
+- **Single Warehouse**: Uses `STRAVA_DEMO_WH` for all workloads (simplified architecture)
 - **Configurable LAG**: 2-minute for activities, 5-minute for aggregations
 - **Filtered Data**: Processes only recent activities (30-day window)
 - **Smart Refresh**: Incremental updates minimize compute costs
 
-## 📊 Demo Use Cases
-
-### 1. Real-time Activity Processing
-- **Challenge**: Process athlete activities as they upload
-- **Solution**: 2-minute LAG Dynamic Table with AI insights
-- **Outcome**: Near real-time performance feedback for athletes
-
-### 2. Athlete Performance Analytics
-- **Challenge**: Track athlete progress and engagement patterns
-- **Solution**: Aggregated KPIs with performance tier classification
-- **Outcome**: Segmented athlete groups for targeted engagement
-
-### 3. AI-Powered Coaching
-- **Challenge**: Provide personalized feedback at scale
-- **Solution**: Cortex COMPLETE generates insights for each activity and athlete
-- **Outcome**: Automated coaching recommendations without human review
 
 ## 🔧 Configuration Options
 
@@ -175,7 +171,6 @@ When not actively demoing, suspend to prevent ongoing refreshes:
 ```sql
 ALTER DYNAMIC TABLE ACTIVITY_INTELLIGENCE SUSPEND;
 ALTER DYNAMIC TABLE ATHLETE_PERFORMANCE_DASHBOARD SUSPEND;
-ALTER WAREHOUSE STRAVA_DT_DEMO_WH SUSPEND;
 ```
 
 Resume when ready:
@@ -219,16 +214,19 @@ ALTER DYNAMIC TABLE ATHLETE_PERFORMANCE_DASHBOARD RESUME;
 
 ## 🧹 Cleanup
 
-To completely remove all demo objects:
+To completely remove all demo objects, run `02_cleanup.ipynb` or execute:
 
 ```sql
 USE ROLE ACCOUNTADMIN;
 
--- Drop objects
+-- Drop Dynamic Tables
+DROP DYNAMIC TABLE IF EXISTS STRAVA_DEMO_SAMPLE.STRAVA_DYNAMIC_TABLES.ATHLETE_PERFORMANCE_DASHBOARD;
+DROP DYNAMIC TABLE IF EXISTS STRAVA_DEMO_SAMPLE.STRAVA_DYNAMIC_TABLES.ACTIVITY_INTELLIGENCE;
+
+-- Drop schemas, database, warehouse, and role
 DROP SCHEMA IF EXISTS STRAVA_DEMO_SAMPLE.STRAVA_DYNAMIC_TABLES CASCADE;
 DROP SCHEMA IF EXISTS STRAVA_DEMO_SAMPLE.RAW_DATA CASCADE;
 DROP DATABASE IF EXISTS STRAVA_DEMO_SAMPLE CASCADE;
-DROP WAREHOUSE IF EXISTS STRAVA_DT_DEMO_WH;
 DROP WAREHOUSE IF EXISTS STRAVA_DEMO_WH;
 DROP ROLE IF EXISTS STRAVA_DEMO_ADMIN;
 ```
