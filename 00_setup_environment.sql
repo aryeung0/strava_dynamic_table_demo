@@ -15,7 +15,7 @@ CREATE ROLE IF NOT EXISTS STRAVA_DEMO_ADMIN
     COMMENT = 'Role for Strava Dynamic Tables demo';
 
 -- Grant role to current user (adjust as needed)
-GRANT ROLE STRAVA_DEMO_ADMIN TO USER CURRENT_USER();
+GRANT ROLE STRAVA_DEMO_ADMIN TO ROLE ACCOUNTADMIN;
 
 -- ============================================================================
 -- 2. CREATE WAREHOUSE
